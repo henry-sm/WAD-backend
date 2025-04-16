@@ -1,6 +1,7 @@
 package com.wadproject.qrcode.Organisation;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "Organisation")
@@ -8,10 +9,11 @@ public class Organisation {
 
     @Id
     private String id;
+
+    @Indexed(unique = true)
     private String email;
     private String password;
-    private String[] logs;
-    private String[] employeeIDs; 
+    
 
     public Organisation(){}
 
@@ -33,13 +35,6 @@ public class Organisation {
         return this.password;
     }
 
-    public String[] getLogs(){
-        return this.logs;
-    }
-
-    public String[] getEmployeeIDs(){
-        return this.employeeIDs;
-    }
 
     //Setters
     public void setEmail(String email){
@@ -50,12 +45,5 @@ public class Organisation {
         this.password = pass;
     }
 
-    public void setEmployeeIDs(String[] emp_ids){
-        this.employeeIDs = emp_ids;
-    }
-
-    public void setLogs(String[] logs){
-        this.logs = logs;
-    }
     
 }
