@@ -13,7 +13,7 @@ public class Organisation {
     @Indexed(unique = true)
     private String email;
     private String password;
-    
+
 
     public Organisation(){}
 
@@ -36,6 +36,7 @@ public class Organisation {
     }
 
 
+
     //Setters
     public void setEmail(String email){
         this.email = email;
@@ -44,6 +45,8 @@ public class Organisation {
     public void setPassword(String pass){
         this.password = pass;
     }
+
+
 
     
 }
