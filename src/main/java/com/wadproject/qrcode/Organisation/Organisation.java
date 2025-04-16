@@ -23,10 +23,6 @@ public class Organisation {
     }
 
     //getters
-    public String getId(){
-        return this.id;
-    }
-
     public String getEmail(){
         return this.email;
     }

@@ -29,11 +29,19 @@ public class OrganisationController {
 
     // Create a new organisation
     @PostMapping("/login")
-    public ResponseEntity<Organisation> login(@RequestBody Organisation organisation) {
-        Organisation savedOrganisation = organisationRepository.save(organisation);
-        return ResponseEntity.ok(savedOrganisation);
+    public ResponseEntity<String> login(@RequestBody Organisation organisation) {
+        Optional<Organisation> existingOrganisation = organisationRepository.findByEmail(organisation.getEmail());
+        if (existingOrganisation.isPresent()) {
+            Organisation storedOrganisation = existingOrganisation.get();
+            if (storedOrganisation.getPassword().equals(organisation.getPassword())) {
+                return ResponseEntity.ok("Login successful");
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Organisation not found");
+        }
     }
-
 
     @PostMapping("/register")
     public ResponseEntity<Organisation> registerOrganisation(@RequestBody Organisation organisation) {
