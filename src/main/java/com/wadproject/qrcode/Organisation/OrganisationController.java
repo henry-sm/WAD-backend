@@ -27,20 +27,35 @@ public class OrganisationController {
         return employeeRepository.findAll();
     }
 
+    @GetMapping
+    public List<Organisation> getAllOrganisations() {
+        return organisationRepository.findAll();
+    }
+
+
     // Create a new organisation
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Organisation organisation) {
+    public ResponseEntity<?> login(@RequestBody Organisation organisation) {
         Optional<Organisation> existingOrganisation = organisationRepository.findByEmail(organisation.getEmail());
         if (existingOrganisation.isPresent()) {
             Organisation storedOrganisation = existingOrganisation.get();
             if (storedOrganisation.getPassword().equals(organisation.getPassword())) {
-                return ResponseEntity.ok("Login successful");
+                return ResponseEntity.status(HttpStatus.OK).body(storedOrganisation);
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
             }
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Organisation not found");
         }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEmployeeById(@PathVariable String id) {
+        if (!organisationRepository.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        organisationRepository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/register")

@@ -15,19 +15,18 @@ public class Employee {
     @Id
     private String id;
     
-    private String organisation_id;
+    private String organisationId;
 
     @Indexed(unique = true)
     private String email;
-    private List<String> logs;
+    private List<String> logs  = new ArrayList<>();;
     private LocalDate lastMarkedAt;
 
     public Employee(){}
 
-    public Employee(String email,String organisation_id){
-        this.organisation_id = organisation_id;
+    public Employee(String email,String organisationId){
+        this.organisationId = organisationId;
         this.email = email;
-        this.logs = new ArrayList<>();
         this.lastMarkedAt = null;
     }
 
@@ -42,7 +41,7 @@ public class Employee {
 
 
     public String getOrganisationId(){
-        return this.organisation_id;
+        return this.organisationId;
     }
 
     public List<String> getLogs(){
@@ -56,7 +55,7 @@ public class Employee {
     }
 
     public void setOrganisationId(String org_id){
-        this.organisation_id = org_id;
+        this.organisationId = org_id;
     }
 
     public void setLogs(List<String> logs){
@@ -65,7 +64,7 @@ public class Employee {
 
 
     public void markAttendance(){
-        if(this.lastMarkedAt == LocalDate.now()){
+        if (LocalDate.now().equals(this.lastMarkedAt)) {
             return;
         }else{
             String log = "EmployeeID: "+this.id+" Employee Email: "+this.email+" Marked at: "+ LocalDateTime.now().toString();

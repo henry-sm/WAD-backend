@@ -5,6 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.wadproject.qrcode.Organisation.Organisation;
+import com.wadproject.qrcode.Organisation.OrganisationRepository;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -16,9 +19,19 @@ public class EmployeeController {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private OrganisationRepository organisationRepository;
+
     // Create a new Employee
     @PostMapping
     public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
+        if (!organisationRepository.existsById(employee.getOrganisationId())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+       
+        if(employeeRepository.existsByEmail(employee.getEmail())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
         Employee savedEmployee = employeeRepository.save(employee);
         return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
     }

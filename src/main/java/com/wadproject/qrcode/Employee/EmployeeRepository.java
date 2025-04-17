@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EmployeeRepository extends MongoRepository<Employee, String> {
-    // You can add custom methods here later
+    boolean existsByEmail(String email);
 }
