@@ -27,7 +27,6 @@ public class Organisation {
         return this.id;
     }
 
-
     public String getEmail(){
         return this.email;
     }
