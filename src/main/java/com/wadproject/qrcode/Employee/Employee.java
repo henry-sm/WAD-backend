@@ -44,6 +44,10 @@ public class Employee {
         return this.organisationId;
     }
 
+    public LocalDate getLastMarkedAt(){
+        return this.lastMarkedAt;
+    }
+
     public List<String> getLogs(){
         return this.logs;
     }
@@ -62,15 +66,13 @@ public class Employee {
         this.logs = logs;
     }
 
-
-    public void markAttendance(){
-        if (LocalDate.now().equals(this.lastMarkedAt)) {
-            return;
-        }else{
-            this.logs.add(LocalDateTime.now().toString());
-            this.lastMarkedAt = LocalDate.now();
-        }
-        
+    public void addLogs(String log){
+        this.logs.add(log);
     }
+
+    public void setLastMarkedAt(LocalDate lastMarkedAt){
+        this.lastMarkedAt = lastMarkedAt;
+    }
+
     
 }
