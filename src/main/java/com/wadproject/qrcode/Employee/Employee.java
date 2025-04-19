@@ -67,8 +67,7 @@ public class Employee {
         if (LocalDate.now().equals(this.lastMarkedAt)) {
             return;
         }else{
-            String log = "EmployeeID: "+this.id+" Employee Email: "+this.email+" Marked at: "+ LocalDateTime.now().toString();
-            this.logs.add(log);
+            this.logs.add(LocalDateTime.now().toString());
             this.lastMarkedAt = LocalDate.now();
         }
         
