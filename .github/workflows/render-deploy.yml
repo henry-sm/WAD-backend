@@ -1,0 +1,13 @@
+name: Deploy to Render
+
+on:
+  push:
+    branches:
+      - main  
+jobs:
+  trigger-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Call Render Deployment Hook
+        run: curl -X POST https://api.render.com/deploy/srv-d019sjuuk2gs73dgmocg?key=4Vr6UFA-QiQ
