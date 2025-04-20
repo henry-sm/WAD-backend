@@ -1,3 +1,5 @@
+package com.wadproject.qrcode;
+
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;

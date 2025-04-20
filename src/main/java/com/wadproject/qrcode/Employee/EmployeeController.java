@@ -1,6 +1,10 @@
 package com.wadproject.qrcode.Employee;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +20,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -48,6 +55,7 @@ public class EmployeeController {
     }
 
     //Mark Atendance of an Employee
+    
     @PostMapping("/{id}/attend")
     public ResponseEntity<Map<String,String>> markEmployeeAttendance(@PathVariable String id) {
         System.out.println(id);
@@ -60,20 +68,25 @@ public class EmployeeController {
             if (LocalDate.now().equals(emp.getLastMarkedAt())) {
                 map.put("message","Employee Already Marked");
                 return new ResponseEntity<>(map, HttpStatus.CONFLICT);
-            }else{
-                emp.addLogs(LocalDateTime.now().toString());
-                emp.setLastMarkedAt(LocalDate.now());
+            } else {
+                // Create update operation
+                Update update = new Update();
+                update.push("logs", LocalDateTime.now().toString());
+                update.set("lastMarkedAt", LocalDate.now());
+                
+                // Execute update
+                mongoTemplate.updateFirst(
+                    Query.query(Criteria.where("id").is(id)), 
+                    update, 
+                    Employee.class
+                );
             }
-
-            employeeRepository.save(emp);
-        }else{
+        } else {
             map.put("message","Employee not Found");
-            return  new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
         }
-
         
         map.put("message","Attendance Updated");
-        //Implement the response
         return new ResponseEntity<>(map, HttpStatus.CREATED);
     }
 }
