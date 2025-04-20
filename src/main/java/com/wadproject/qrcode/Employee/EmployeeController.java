@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import com.wadproject.qrcode.Organisation.OrganisationRepository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -60,14 +59,18 @@ public class EmployeeController {
 
     //Mark Atendance of an Employee
     
-    @PostMapping("/{id}/attend")
-    public ResponseEntity<Map<String,String>> markEmployeeAttendance(@PathVariable String id) {
+    @PostMapping("/{id}/attend/{orgId}")
+    public ResponseEntity<Map<String,String>> markEmployeeAttendance(@PathVariable String id,@PathVariable String orgId) {
         System.out.println(id);
         Optional<Employee> _employee = employeeRepository.findById(id);
         Map<String,String> map = new HashMap<>();
 
         if(_employee.isPresent()){
             Employee emp = _employee.get();
+
+            if(!emp.getOrganisationId().equals(orgId)){
+                return new ResponseEntity<>(map, HttpStatus.FORBIDDEN);
+            }
 
             if (LocalDate.now().equals(emp.getLastMarkedAt())) {
                 map.put("message","Employee Already Marked");
