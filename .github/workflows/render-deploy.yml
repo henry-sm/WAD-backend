@@ -3,9 +3,10 @@ name: Deploy to Render
 on:
   push:
     branches:
-      - main  
+      - main  # or your preferred branch
     paths:
-    - 'src/**'
+      - 'src/**'  # only trigger when files inside src/ change
+
 jobs:
   trigger-deploy:
     runs-on: ubuntu-latest
