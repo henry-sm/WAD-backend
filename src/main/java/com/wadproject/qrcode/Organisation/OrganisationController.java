@@ -22,9 +22,9 @@ public class OrganisationController {
     private EmployeeRepository employeeRepository;
 
     // Get all organisation's employees using Employee Repository
-    @GetMapping("/employees")
-    public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+    @GetMapping("/{id}/employees")
+    public List<Employee> getAllEmployees(@PathVariable String id) {
+        return employeeRepository.findByOrganisationId(id);
     }
 
     @GetMapping

@@ -14,8 +14,12 @@ import com.wadproject.qrcode.Organisation.OrganisationRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
 
 @RestController
 @RequestMapping("/employee")
@@ -70,8 +74,10 @@ public class EmployeeController {
                 return new ResponseEntity<>(map, HttpStatus.CONFLICT);
             } else {
                 // Create update operation
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy, hh:mm a z", Locale.ENGLISH);
+
                 Update update = new Update();
-                update.push("logs", LocalDateTime.now().toString());
+                update.push("logs",ZonedDateTime.now(ZoneId.of("Asia/Kolkata")).format(formatter) );
                 update.set("lastMarkedAt", LocalDate.now());
                 
                 // Execute update
