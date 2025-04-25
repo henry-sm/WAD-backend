@@ -65,6 +65,8 @@ public class EmployeeController {
         Optional<Employee> _employee = employeeRepository.findById(id);
         Map<String,String> map = new HashMap<>();
 
+        String response = "";
+
         if(_employee.isPresent()){
             Employee emp = _employee.get();
 
@@ -72,8 +74,10 @@ public class EmployeeController {
                 return new ResponseEntity<>(map, HttpStatus.FORBIDDEN);
             }
 
+            Update update = new Update();
+
             if(!LocalDate.now().equals(emp.getLastMarkedAt())){
-                emp.setAttended(0);
+                update.set("attended", 0);
             }
 
             if (emp.getAttended()>=2) {
@@ -83,13 +87,15 @@ public class EmployeeController {
                 // Create update operation
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy, hh:mm a z", Locale.ENGLISH);
 
-                Update update = new Update();
+                
                 if(emp.getAttended()==0){
                     update.push("logs",ZonedDateTime.now(ZoneId.of("Asia/Kolkata")).format(formatter)+" : IN" );
-                    emp.setAttended(1);
+                    update.set("attended", 1);
+                    response = "Employee is Punched In";
                 }else{
                     update.push("logs",ZonedDateTime.now(ZoneId.of("Asia/Kolkata")).format(formatter)+" : OUT"  );
-                    emp.setAttended(2);
+                    update.set("attended", 2);
+                    response = "Employee is Punched Out";
                 }
                 update.set("lastMarkedAt", LocalDate.now());
                 
@@ -105,7 +111,7 @@ public class EmployeeController {
             return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
         }
         
-        map.put("message","Attendance Updated");
+        map.put("message",response);
         return new ResponseEntity<>(map, HttpStatus.CREATED);
     }
 }
