@@ -20,6 +20,7 @@ public class Employee {
     private String email;
     private List<String> logs  = new ArrayList<>();;
     private LocalDate lastMarkedAt;
+    private int attended = 0;
 
     public Employee(){}
 
@@ -71,6 +72,14 @@ public class Employee {
 
     public void setLastMarkedAt(LocalDate lastMarkedAt){
         this.lastMarkedAt = lastMarkedAt;
+    }
+
+    public void setAttended(int attended) {
+        this.attended = attended;
+    }
+
+    public int getAttended() {
+        return attended;
     }
 
     

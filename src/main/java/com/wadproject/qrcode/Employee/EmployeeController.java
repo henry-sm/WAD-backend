@@ -72,15 +72,25 @@ public class EmployeeController {
                 return new ResponseEntity<>(map, HttpStatus.FORBIDDEN);
             }
 
-            if (LocalDate.now().equals(emp.getLastMarkedAt())) {
-                map.put("message","Employee Already Marked");
+            if(!LocalDate.now().equals(emp.getLastMarkedAt())){
+                emp.setAttended(0);
+            }
+
+            if (emp.getAttended()>=2) {
+                map.put("message","Employee Already Marked Twice");
                 return new ResponseEntity<>(map, HttpStatus.CONFLICT);
             } else {
                 // Create update operation
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy, hh:mm a z", Locale.ENGLISH);
 
                 Update update = new Update();
-                update.push("logs",ZonedDateTime.now(ZoneId.of("Asia/Kolkata")).format(formatter) );
+                if(emp.getAttended()==0){
+                    update.push("logs",ZonedDateTime.now(ZoneId.of("Asia/Kolkata")).format(formatter)+" : IN" );
+                    emp.setAttended(1);
+                }else{
+                    update.push("logs",ZonedDateTime.now(ZoneId.of("Asia/Kolkata")).format(formatter)+" : OUT"  );
+                    emp.setAttended(2);
+                }
                 update.set("lastMarkedAt", LocalDate.now());
                 
                 // Execute update
