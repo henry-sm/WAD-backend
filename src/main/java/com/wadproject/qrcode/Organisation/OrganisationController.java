@@ -54,6 +54,12 @@ public class OrganisationController {
         if (!organisationRepository.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+
+        List<Employee> employees = employeeRepository.findByOrganisationId(id);;
+        if(employees.size() != 0){
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        
         organisationRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }
